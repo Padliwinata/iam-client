@@ -11,3 +11,4 @@ micros:
         - server
       run: ./server
       dev: go run .
+      public: true
