@@ -65,7 +65,7 @@ func main() {
 			return c.JSON(http.StatusUnauthorized, data)
 		}
 
-		if !iam.CheckPermission(jwtToken, "$2b$04$VFIar.GWpZXLQqLk3sVoEehKdaHuU2JJoY6j5J.2g9AsHZFR8SkAu", "user:create") {
+		if !iam.CheckPermission(jwtToken, "$2b$04$VFIar.GWpZXLQqLk3sVoEehKdaHuU2JJoY6j5J.2g9AsHZFR8SkAu", "none") {
 			data := map[string]interface{}{
 				"message": "unauthorized",
 			}
@@ -80,5 +80,5 @@ func main() {
 
 	})
 
-	e.Logger.Fatal(e.Start(":8001"))
+	e.Logger.Fatal(e.Start(":8080"))
 }
