@@ -6,15 +6,21 @@ import (
 
 	"github.com/Padliwinata/iam-sdk"
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 func main() {
 	e := echo.New()
 
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"*"},
+		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
+	}))
+
 	e.GET("/", func(c echo.Context) error {
 
 		data := map[string]interface{}{
-			"messsage": "public",
+			"message": "public",
 		}
 
 		return c.JSON(http.StatusOK, data)
@@ -65,7 +71,7 @@ func main() {
 			return c.JSON(http.StatusUnauthorized, data)
 		}
 
-		if !iam.CheckPermission(jwtToken, "$2b$04$VFIar.GWpZXLQqLk3sVoEehKdaHuU2JJoY6j5J.2g9AsHZFR8SkAu", "none") {
+		if !iam.CheckPermission(jwtToken, "$2b$04$VFIar.GWpZXLQqLk3sVoEehKdaHuU2JJoY6j5J.2g9AsHZFR8SkAu", "user:create") {
 			data := map[string]interface{}{
 				"message": "unauthorized",
 			}
