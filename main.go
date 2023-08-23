@@ -12,12 +12,15 @@ import (
 func main() {
 	e := echo.New()
 
-	e.Use(middleware.CORSWithConfig(middleware.DefaultCORSConfig))
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"*"},
+		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
+	}))
 
 	e.GET("/", func(c echo.Context) error {
 
 		data := map[string]interface{}{
-			"messsage": "public",
+			"message": "public",
 		}
 
 		return c.JSON(http.StatusOK, data)
