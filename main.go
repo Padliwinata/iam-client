@@ -26,6 +26,11 @@ func main() {
 		if authHeader == "" || !strings.HasPrefix(authHeader, "Bearer ") {
 			data := map[string]interface{}{
 				"message": "need authorization",
+				"data": []map[string]interface{}{
+					{"title": "News 1", "date": "21/08/23", "content": "example"},
+					{"title": "News 2", "date": "22/08/23", "content": "example"},
+					{"title": "News 3", "date": "23/08/23", "content": "example"},
+				},
 			}
 			return c.JSON(http.StatusUnauthorized, data)
 		}
@@ -74,6 +79,35 @@ func main() {
 
 		data := map[string]interface{}{
 			"message": "authorized",
+			"data": []map[string]interface{}{
+				{
+					"title":   "News 1",
+					"date":    "21/08/23",
+					"content": "example",
+					"writer": map[string]interface{}{
+						"name":   "John",
+						"region": "First",
+					},
+				},
+				{
+					"title":   "News 2",
+					"date":    "22/08/23",
+					"content": "example",
+					"writer": map[string]interface{}{
+						"name":   "John",
+						"region": "First",
+					},
+				},
+				{
+					"title":   "News 3",
+					"date":    "23/08/23",
+					"content": "example",
+					"writer": map[string]interface{}{
+						"name":   "Doe",
+						"region": "Second",
+					},
+				},
+			},
 		}
 
 		return c.JSON(http.StatusOK, data)
