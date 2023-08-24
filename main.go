@@ -6,15 +6,21 @@ import (
 
 	"github.com/Padliwinata/iam-sdk"
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 func main() {
 	e := echo.New()
 
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"*"},
+		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
+	}))
+
 	e.GET("/", func(c echo.Context) error {
 
 		data := map[string]interface{}{
-			"messsage": "public",
+			"message": "public",
 		}
 
 		return c.JSON(http.StatusOK, data)
@@ -46,6 +52,16 @@ func main() {
 
 		data := map[string]interface{}{
 			"message": "authenticated",
+			"data": []map[string]interface{}{
+				{
+					"title":  "Example 1",
+					"region": "First",
+				},
+				{
+					"title":  "Example 2",
+					"region": "Second",
+				},
+			},
 		}
 
 		return c.JSON(http.StatusOK, data)
@@ -70,7 +86,7 @@ func main() {
 			return c.JSON(http.StatusUnauthorized, data)
 		}
 
-		if !iam.CheckPermission(jwtToken, "$2b$04$VFIar.GWpZXLQqLk3sVoEehKdaHuU2JJoY6j5J.2g9AsHZFR8SkAu", "none") {
+		if !iam.CheckPermission(jwtToken, "$2b$04$VFIar.GWpZXLQqLk3sVoEehKdaHuU2JJoY6j5J.2g9AsHZFR8SkAu", "user:create") {
 			data := map[string]interface{}{
 				"message": "unauthorized",
 			}
@@ -81,30 +97,19 @@ func main() {
 			"message": "authorized",
 			"data": []map[string]interface{}{
 				{
-					"title":   "News 1",
-					"date":    "21/08/23",
-					"content": "example",
+					"title":  "Example 1",
+					"region": "First",
 					"writer": map[string]interface{}{
-						"name":   "John",
-						"region": "First",
+						"name":  "Writer 1",
+						"grade": "S",
 					},
 				},
 				{
-					"title":   "News 2",
-					"date":    "22/08/23",
-					"content": "example",
+					"title":  "Example 2",
+					"region": "Second",
 					"writer": map[string]interface{}{
-						"name":   "John",
-						"region": "First",
-					},
-				},
-				{
-					"title":   "News 3",
-					"date":    "23/08/23",
-					"content": "example",
-					"writer": map[string]interface{}{
-						"name":   "Doe",
-						"region": "Second",
+						"name":  "Writer 2",
+						"grade": "A",
 					},
 				},
 			},
